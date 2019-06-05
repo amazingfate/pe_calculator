@@ -66,6 +66,7 @@ def get_index_stock_pe_date_weights(index_code, date):
             pe_weight = pe_sum_final
         else:
             pe_weight = float('NaN')
+            print("stock %s e_sum is %s on date %s" % (data['code'], e_sum, date))
 
         sum_p = 0
         sum_e = 0
@@ -78,8 +79,10 @@ def get_index_stock_pe_date_weights(index_code, date):
             pe = sum_p / sum_e
         else:
             pe = float('NaN')
+            print("stock %s sum_e is %s on date %s" % (data['code'], sum_e, date))
         return pe, pe_weight
     else:
+        print("length of stock weight is %s on %s" % (len(stocks_weight),date))
         return float('NaN'), float('NaN')
 
 
@@ -108,17 +111,18 @@ index_choose =['000016.XSHG',
                '000978.XSHG',
                '000922.XSHG',
                '399006.XSHE',
-               '000852.XSHG',
                '000989.XSHG',
                '000991.XSHG',
                '000993.XSHG',
                '000827.XSHG',
                '399812.XSHE',
                '399967.XSHE',
-               '399971.XSHE'
+               '399971.XSHE',
+               '000905.XSHG',
+               '399550.XSHE'
               ]
 
-#index_choose = ['000852.XSHG']
+#index_choose = ['399550.XSHE']
 
 def cal_pe(index_choose):
     df_pe1 = pd.DataFrame()
@@ -140,6 +144,7 @@ def cal_pe(index_choose):
         q_pes2 = [df_pe2.quantile(i/10.0)[code]  for i in range(11)]
         idx1 = bisect.bisect(q_pes1,pe1)
         idx2 = bisect.bisect(q_pes2,pe2)
+        print(idx1,pe1,idx2,pe2)
         quantile1 = idx1-(q_pes1[idx1]-pe1)/(q_pes1[idx1]-q_pes1[idx1-1])
         quantile2 = idx2-(q_pes2[idx2]-pe2)/(q_pes2[idx2]-q_pes2[idx2-1])
         index_name = all_index.ix[code].display_name
